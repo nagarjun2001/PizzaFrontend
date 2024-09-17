@@ -2937,7 +2937,7 @@ const PaymentForm = () => {
 
           if (clearResponse.data === 'Success') {
             setIsLoading(false);
-            navigate('/success'); // Redirect to success page
+            navigate('/homepage');
           } else {
             toast.error('Failed to clear cart items.');
             setIsLoading(false);

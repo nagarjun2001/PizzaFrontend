@@ -147,171 +147,10 @@
 // }
 
 // export default OrderHistory;
-
 //above is the working code
-
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import toast from 'react-hot-toast';
-// import NewNav from './NewNav';
-// import CustomerNavbar from '../Navbar/CustomerNavbar';
-
-// function OrderHistory() {
-//   const [orders, setOrders] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [foodData, setFoodData] = useState({});
-//   const [ratings, setRatings] = useState({});
-//   const [deliveryStatuses, setDeliveryStatuses] = useState({});
-
-//   useEffect(() => {
-//     const fetchOrders = async () => {
-//       const customerId = sessionStorage.getItem('custid');
-
-//       if (!customerId) {
-//         toast.error('Customer ID not found in session storage.');
-//         setLoading(false);
-//         return;
-//       }
-
-//       try {
-//         // Fetch cart history based on customerId
-//         const response = await axios.get(`http://localhost:1234/carthistory/customer/${customerId}`);
-//         const orders = response.data;
-
-//         if (orders.length === 0) {
-//           toast.info('No orders found for this customer.');
-//         }
-
-//         // Fetch food details for each order
-//         const foodPromises = orders.map(order =>
-//           axios.get(`http://localhost:1234/food/${order.foodId}`)
-//         );
-//         const foodResponses = await Promise.all(foodPromises);
-//         const foodDetails = foodResponses.reduce((acc, { data }) => {
-//           acc[data.id] = data;
-//           return acc;
-//         }, {});
-
-//         // Fetch ratings for each order
-//         const ratingsPromises = orders.map(order =>
-//           axios.get(`http://localhost:1234/ratings/order/${order.id}`)
-//         );
-//         const ratingsResponses = await Promise.all(ratingsPromises);
-//         const ratingsDetails = ratingsResponses.reduce((acc, { data }) => {
-//           if (data.length > 0) {
-//             acc[data[0].order.id] = data[0]; // Assuming only one rating per order
-//           }
-//           return acc;
-//         }, {});
-
-//         setOrders(orders);
-//         setFoodData(foodDetails);
-//         setRatings(ratingsDetails);
-//         // Assuming delivery statuses might be part of the order or handled differently
-//         setDeliveryStatuses({}); 
-//       } catch (error) {
-//         console.error('Error fetching orders:', error);
-//         toast.error('Failed to fetch orders.');
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchOrders();
-//   }, []);
-
-//   const handleRating = async (orderId, stars) => {
-//     try {
-//       const response = await axios.post('http://localhost:1234/ratings', {
-//         order: { id: orderId },
-//         stars,
-//         review: '', // Optional
-//         customer: { id: sessionStorage.getItem('custid') },
-//       });
-//       if (response.data === 'Success') {
-//         toast.success('Rating submitted successfully.');
-//         setRatings(prev => ({
-//           ...prev,
-//           [orderId]: { ...prev[orderId], stars }
-//         }));
-//       } else {
-//         toast.error('Failed to submit rating.');
-//       }
-//     } catch (error) {
-//       console.error('Error submitting rating:', error);
-//       toast.error('Failed to submit rating.');
-//     }
-//   };
-
-//   const renderStars = (orderId, currentRating) => {
-//     const stars = Array(5).fill(false).map((_, index) => index < currentRating);
-//     return (
-//       <div className="flex items-center space-x-1 mt-2">
-//         {stars.map((filled, index) => (
-//           <svg
-//             key={index}
-//             className={`w-6 h-6 cursor-pointer transition-transform duration-200 ${filled ? 'text-yellow-400' : 'text-gray-300'} hover:text-yellow-500 hover:scale-110`}
-//             fill="currentColor"
-//             viewBox="0 0 24 24"
-//             onClick={() => handleRating(orderId, index + 1)}
-//           >
-//             <path d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z" />
-//           </svg>
-//         ))}
-//       </div>
-//     );
-//   };
-
-//   if (loading) return <div className="text-center py-8">Loading...</div>;
-
-//   return (
-//     <>
-//       <CustomerNavbar />
-//       <h2 className="text-center font-manrope font-bold text-3xl leading-10 mb-8 text-black">Your Delicious Order History</h2>
-//       <section className="relative py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-//         {orders.length === 0 ? (
-//           <div className="text-center text-gray-500 text-lg">
-//             No orders found. <br /> <a href="/" className="text-blue-500 hover:underline">Place a new order</a>
-//           </div>
-//         ) : (
-//           <div className="bg-white shadow-lg rounded-xl p-6">
-//             {orders.map(order => {
-//               const food = foodData[order.foodId]; // Get food details for this order
-//               const rating = ratings[order.id]?.stars || 0; // Get rating for this order
-//               // Delivery status might not be needed or handled separately
-//               return (
-//                 <div key={order.id} className="flex items-start mb-6 border-b border-gray-300 pb-4">
-//                   <div className="flex-shrink-0">
-//                     {food && (
-//                       <img
-//                         src={`data:image;base64,${food.fimg}`}
-//                         alt={food.fname}
-//                         className="w-24 h-24 object-cover rounded-lg shadow-md"
-//                       />
-//                     )}
-//                   </div>
-//                   <div className="ml-4 flex-1">
-//                     {food && (
-//                       <h3 className="text-xl font-semibold text-gray-800 mb-2">{food.fname}</h3>
-//                     )}
-//                     <p className="text-md text-gray-700 mb-2">Order ID: {order.orders.id}</p>
-//                     <p className="text-md text-gray-700 mb-2">Quantity: {order.qty}</p>
-//                     <p className="text-md text-gray-700 mb-2">Total: ₹ {order.total.toFixed(2)}</p>
-//                     {/* {renderStars(order.id, rating)} */}
-//                   </div>
-//                 </div>
-//               );
-//             })}
-//           </div>
-//         )}
-//       </section>
-//     </>
-//   );
-// }
-
-// export default OrderHistory;
-
 // working code for both status and order tracking
+
+
 // import React, { useEffect, useState } from 'react';
 // import axios from 'axios';
 // import toast from 'react-hot-toast';
@@ -983,6 +822,7 @@
 
 // export default OrderHistory;
 //Perfect code
+
 // import React, { useEffect, useState } from 'react';
 // import axios from 'axios';
 // import toast from 'react-hot-toast';
@@ -1154,7 +994,6 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import CustomerNavbar from '../Navbar/CustomerNavbar';
 import { FaCheckCircle, FaTimesCircle, FaExclamationTriangle, FaTruck, FaClock } from 'react-icons/fa';
-import EmptyCart from '../components/EmptyCart';
 import EmptyOrders from '../components/EmptyOrders';
 
 function OrderHistory() {
@@ -1311,3 +1150,4 @@ function OrderHistory() {
 }
 
 export default OrderHistory;
+

@@ -223,7 +223,7 @@ const SalesReport = () => {
         <p className="text-lg">₹ {totalAmount.toFixed(2)}</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-6 mb-6">
+      {/* <div className="grid grid-cols-2 gap-6 mb-6">
         <div className="chart-container">
           <h2 className="text-xl font-semibold mb-2">Sales Amount by Date</h2>
           <div style={{ width: '100%', height: '400px' }}>
@@ -237,12 +237,12 @@ const SalesReport = () => {
             <Pie data={pieChartData} options={{ maintainAspectRatio: false }} />
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div>
-        <CSVLink data={csvData} headers={columns} filename="orders-report.csv">
+        {/* <CSVLink data={csvData} headers={columns} filename="orders-report.csv">
           <button className="px-4 py-2 bg-blue-500 text-white rounded">Export CSV</button>
-        </CSVLink>
+        </CSVLink> */}
       </div>
     </div>
   );

@@ -331,16 +331,16 @@ const StaffProfile = () => {
                       className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       required />
                   </div>
-                  <div>
+                  {/* <div>
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-                    <input
+                    <input disabled
                       type="password"
                       id="password"
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
                       className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
-                  </div>
+                  </div> */}
                 </div>
                 <button
                   type="submit"
